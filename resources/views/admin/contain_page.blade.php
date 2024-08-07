@@ -47,8 +47,8 @@ $(document).ready(function() {
             error: function() {
                 $('.master-page').html('<p>Error loading form.</p>');
             }
-        })
-    }
+        });
+    };
     // ========================= End Of List Register ======================================
 });
 </script>

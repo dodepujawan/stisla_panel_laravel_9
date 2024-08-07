@@ -33,10 +33,12 @@ Route::prefix('register')->group(function () {
     Route::post('updateregister', [RegisterController::class, 'updateregister'])->name('updateregister');
     Route::get('listregister', [RegisterController::class, 'listregister'])->name('listregister');
     Route::get('filter_register', [RegisterController::class, 'filter_register'])->name('filter_register');
+    Route::get('edit_list_register/{id}', [RegisterController::class, 'edit_list_register'])->name('edit_list_register');
+    Route::post('update_list_register', [RegisterController::class, 'update_list_register'])->name('update_list_register');
 });
 
 Route::prefix('home')->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('index');
+    Route::get('/', [HomeController::class, 'index'])->name('index')->middleware('auth');
 });
 
 

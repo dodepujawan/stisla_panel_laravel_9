@@ -39,54 +39,81 @@
 </div>
 <script>
 $(document).ready(function() {
-    let table = $('#userTable').DataTable({
-        ajax: {
-            url: '{{ route("filter_register") }}',
-            data: function(d) {
-                d.startDate = $('#startDate').val();
-                d.endDate = $('#endDate').val();
-                d.searchText = $('#searchBox').val();
-            }
-        },
-        columns:[
-            { data: 'email' },
-            { data: 'name' },
-            { data: 'roles' },
-            { data: 'created_at' },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    return '<button class="btn btn-primary btn-sm editBtn">Edit</button> ' +
-                            '<button class="btn btn-danger btn-sm deleteBtn">Delete</button>';
+    // ========================== menapilkan list user ===============================
+    loadListRegisterForm();
+    function loadListRegisterForm() {
+        let table = $('#userTable').DataTable({
+            ajax: {
+                url: '{{ route("filter_register") }}',
+                data: function(d) {
+                    d.startDate = $('#startDate').val();
+                    d.endDate = $('#endDate').val();
+                    d.searchText = $('#searchBox').val();
                 }
+            },
+            columns:[
+                { data: 'email' },
+                { data: 'name' },
+                { data: 'roles' },
+                { data: 'created_at' },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<button class="btn btn-primary btn-sm editBtn" data-id="' + row.id + '">Edit</button> ' +
+                                '<button class="btn btn-danger btn-sm deleteBtn" data-id="' + row.id + '">Delete</button>';
+                    }
+                }
+            ],
+            searching: false,
+            paging: true,
+            info: false
+        });
+            $('#filterBtn').on('click', function() {
+                table.ajax.reload();
+            });
+
+            // $('#prevPage').on('click', function() {
+            //     table.page('previous').draw('page');
+            // });
+
+            // $('#nextPage').on('click', function() {
+            //     table.page('next').draw('page');
+            // });
+
+            $('#userTable tbody').on('click', '.editBtn', function () {
+                let data = table.row($(this).parents('tr')).data();
+                // Implementasikan logika edit Anda di sini
+                console.log('Edit:', data);
+            });
+
+            $('#userTable tbody').on('click', '.deleteBtn', function () {
+                let data = table.row($(this).parents('tr')).data();
+                // Implementasikan logika hapus Anda di sini
+                console.log('Delete:', data);
+            });
+    }
+    // ========================== end of menapilkan list user ===============================
+
+    // ============================ edit list user =================================
+    $(document).on('click', '.editBtn', function(e) {
+        e.preventDefault();
+        let id = $(this).data('id');
+        let url = '{{ route("edit_list_register", ":id") }}';
+        url = url.replace(':id', id);
+        $.ajax({
+            url: url, // Route to load the form
+            type: 'GET',
+            success: function(response) {
+                $('.master-page').html(response);
+            },
+            error: function() {
+                $('.master-page').html('<p>Error loading form.</p>');
             }
-        ],
-        searching: false,
-        paging: true,
-        info: false
+        });
     });
-        $('#filterBtn').on('click', function() {
-            table.ajax.reload();
-        });
+    // ========================== end of edit list user ===============================
 
-        // $('#prevPage').on('click', function() {
-        //     table.page('previous').draw('page');
-        // });
-
-        // $('#nextPage').on('click', function() {
-        //     table.page('next').draw('page');
-        // });
-
-        $('#userTable tbody').on('click', '.editBtn', function () {
-            let data = table.row($(this).parents('tr')).data();
-            // Implementasikan logika edit Anda di sini
-            console.log('Edit:', data);
-        });
-
-        $('#userTable tbody').on('click', '.deleteBtn', function () {
-            let data = table.row($(this).parents('tr')).data();
-            // Implementasikan logika hapus Anda di sini
-            console.log('Delete:', data);
-        });
 });
+
+
 </script>

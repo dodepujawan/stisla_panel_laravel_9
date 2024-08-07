@@ -130,4 +130,47 @@ class RegisterController extends Controller
         ]);
     }
 
+    public function edit_list_register($id){
+        // Fetch user data
+        $user = User::find($id);// Assuming session has user id
+        return view('register.edit_list_register', compact('user'));
+    }
+
+    public function update_list_register(Request $request)
+    {
+        $result = [];
+        DB::beginTransaction();
+        try {
+            // Validate the request data
+            $validatedData = $request->validate([
+                'email' => 'required|email',
+                'name' => 'required|string|max:255',
+                'password' => 'nullable|string|min:8',
+                'roles' => 'required|string|max:255',
+            ]);
+
+            $id = $request->input('id');
+            $user = User::find($id);
+
+            // Update user details
+            $user->email = $request->email;
+            $user->name = $request->name;
+            if ($request->password) {
+                $user->password = Hash::make($request->password);
+            }
+            $user->roles = $request->roles;
+            $user->save();
+
+            DB::commit();
+            $result['pesan'] = 'Update Berhasil.';
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollback();
+            $result['pesan'] = 'Validation Error: ' . implode(', ', Arr::flatten($e->errors()));
+        } catch (\Exception $e) {
+            DB::rollback();
+            $result['pesan'] = 'Error: ' . $e->getMessage();
+        }
+        return response()->json($result);
+    }
+
 }
