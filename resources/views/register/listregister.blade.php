@@ -20,7 +20,7 @@
                 <th>Email</th>
                 <th>Name</th>
                 <th>Roles</th>
-                <th>Date At</th>
+                <th>Joined At</th>
                 <th>Actions</th>
             </tr>
         </thead>
