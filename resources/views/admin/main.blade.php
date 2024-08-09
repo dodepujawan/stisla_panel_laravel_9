@@ -23,6 +23,7 @@
     </style>
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     {{-- <title>{{ $title }}</title> --}}
 
@@ -99,3 +100,85 @@
 </html>
 
 @yield('footer')
+<script>
+$(document).ready(function() {
+// ========================= Edit Register ======================================
+    $(document).on('click', '.dropdown-item.edit-register', function(e) {
+        alert('Edit Register clicked');
+        e.preventDefault();
+        loadEditRegisterForm();
+    });
+
+    function loadEditRegisterForm() {
+        $.ajax({
+            url: '{{ route('editregister') }}', // Route to load the form
+            type: 'GET',
+            success: function(response) {
+                $('.master-page').html(response);
+            },
+            error: function() {
+                $('.master-page').html('<p>Error loading form.</p>');
+            }
+        });
+    }
+// ========================= End Of Edit Register ======================================
+
+// ======================== List Register ============================================
+    $(document).on('click', '.dropdown-item.list-register', function(e) {
+        alert('Edit Register clicked');
+        e.preventDefault();
+        loadListRegisterForm();
+    });
+
+    function loadListRegisterForm(){
+        $.ajax({
+            url: '{{ route('listregister') }}',
+            success: function(response) {
+                $('.master-page').html(response);
+            },
+            error: function() {
+                $('.master-page').html('<p>Error loading form.</p>');
+            }
+        });
+    };
+
+    // ### Edit ###
+        $(document).off('submit', '#editListRegisterForm');
+        $(document).on('submit', '#editListRegisterForm', function(e) {
+            console.log('Submit handler called');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            e.preventDefault();
+            e.stopPropagation();
+            $.ajax({
+                url: '{{ route('update_list_register') }}', // Route to handle form submission
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    reloadContent();
+                },
+                error: function(response) {
+                    $('#message').html('<p>' + response.responseJSON.pesan + '</p>');
+                }
+            });
+        });
+
+        function reloadContent() {
+                $.ajax({
+                        url: '{{ route('listregister') }}',
+                        success: function(response) {
+                            $('.master-page').html(response);
+                        },
+                        error: function() {
+                            $('.master-page').html('<p>Error loading form.</p>');
+                        }
+                    });
+        };
+// ========================= End Of List Register ======================================
+
+});
+</script>
+
