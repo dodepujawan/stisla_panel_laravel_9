@@ -38,10 +38,48 @@
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script> --}}
 <script>
 
-$(document).ready(function(){
+$(document).ready(function() {
+    initializeForm();
 
+    function initializeForm() {
+        $(document).off('submit', '#editListRegisterForm');
 
+        $(document).on('submit', '#editListRegisterForm', function(e) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            e.preventDefault();
+            e.stopPropagation();
+            $.ajax({
+                url: '{{ route('update_list_register') }}', // Route to handle form submission
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    reloadContent();
+                },
+                error: function(response) {
+                    $('#message').html('<p>' + response.responseJSON.pesan + '</p>');
+                }
+            });
+        });
+    }
 
+    function reloadContent() {
+        $.ajax({
+            url: '{{ route('listregister') }}',
+            success: function(response) {
+                $('.master-page').html(response);
+                initializeForm(); // Panggil kembali fungsi inisialisasi
+            },
+            error: function() {
+                $('.master-page').html('<p>Error loading form.</p>');
+            }
+        });
+    };
 });
+
+
 </script>
 
