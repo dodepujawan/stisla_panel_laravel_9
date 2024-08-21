@@ -114,17 +114,6 @@ $(document).ready(function() {
             //     table.page('next').draw('page');
             // });
 
-            $('#userTable tbody').on('click', '.editBtn', function () {
-                let data = table.row($(this).parents('tr')).data();
-                // Implementasikan logika edit Anda di sini
-                console.log('Edit:', data);
-            });
-
-            $('#userTable tbody').on('click', '.deleteBtn', function () {
-                let data = table.row($(this).parents('tr')).data();
-                // Implementasikan logika hapus Anda di sini
-                console.log('Delete:', data);
-            });
     }
     // ========================== end of menapilkan list user ===============================
 
@@ -186,6 +175,52 @@ $(document).ready(function() {
         });
     });
     // ========================== end of update list user ===============================
+    // ============================= delete list user ==================================
+    $(document).on('click','.deleteBtn', function(e){
+        e.preventDefault();
+        let row = $(this).closest('tr');
+        let id = $(this).data('id');
+        let url = '{{ route("delete_list_register", ":id") }}';
+        url = url.replace(':id', id);
+
+        Swal.fire({
+        title: 'Apakah Anda yakin?',
+        text: "Data ini akan dihapus secara permanen!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: url,
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        $('#userTable').DataTable().row(row).remove().draw(false);
+
+                        Swal.fire(
+                            'Terhapus!',
+                            'Data telah berhasil dihapus.',
+                            'success'
+                        );
+                    },
+                    error: function(xhr) {
+                        Swal.fire(
+                            'Error!',
+                            'Terjadi kesalahan saat menghapus data.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    })
+    // ========================== end of delete list user ===============================
 
 });
 

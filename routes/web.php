@@ -35,6 +35,7 @@ Route::prefix('register')->group(function () {
     Route::get('filter_register', [RegisterController::class, 'filter_register'])->name('filter_register');
     Route::get('edit_list_register/{id}', [RegisterController::class, 'edit_list_register'])->name('edit_list_register');
     Route::post('update_list_register', [RegisterController::class, 'update_list_register'])->name('update_list_register');
+    Route::delete('delete_list_register/{id}', [RegisterController::class, 'delete_list_register'])->name('delete_list_register');
 });
 
 Route::prefix('home')->group(function () {

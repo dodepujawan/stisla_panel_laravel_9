@@ -173,4 +173,15 @@ class RegisterController extends Controller
         return response()->json($result);
     }
 
+    public function delete_list_register($id){
+        $user = User::find($id);
+
+        if ($user){
+            $user->delete();
+            return response()->json(['success' => 'User berhasil dihapus']);
+        }else{
+            return response()->json(['error' => 'User tidak ditemukan'], 404);
+        }
+    }
+
 }
