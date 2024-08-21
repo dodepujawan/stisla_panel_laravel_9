@@ -133,7 +133,7 @@ class RegisterController extends Controller
     public function edit_list_register($id){
         // Fetch user data
         $user = User::find($id);// Assuming session has user id
-        return view('register.edit_list_register', compact('user'));
+        return response()->json($user);
     }
 
     public function update_list_register(Request $request)

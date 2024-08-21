@@ -1,42 +1,76 @@
-  <div class="container mt-5">
-    <h2>User Table</h2>
-    <div class="row mb-3">
-        <div class="col-md-3">
-            <input type="date" id="startDate" class="form-control" placeholder="Start Date">
+<div class="container mt-5">
+    <div id="formtable">
+        <h2>User Table</h2>
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <input type="date" id="startDate" class="form-control" placeholder="Start Date">
+            </div>
+            <div class="col-md-3">
+                <input type="date" id="endDate" class="form-control" placeholder="End Date">
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="searchBox" class="form-control" placeholder="Search">
+            </div>
+            <div class="col-md-3">
+                <button id="filterBtn" class="btn btn-primary">Filter</button>
+            </div>
         </div>
-        <div class="col-md-3">
-            <input type="date" id="endDate" class="form-control" placeholder="End Date">
-        </div>
-        <div class="col-md-3">
-            <input type="text" id="searchBox" class="form-control" placeholder="Search">
-        </div>
-        <div class="col-md-3">
-            <button id="filterBtn" class="btn btn-primary">Filter</button>
+        <table id="userTable" class="display table table-bordered mb-2">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Roles</th>
+                    <th>Joined At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data akan diisi oleh DataTables -->
+            </tbody>
+        </table>
+    </div>
+
+    <div id="formedit" class="d-none">
+        <div class="container master-edit-register"><br>
+            <div class="col-md-6 col-md-offset-3">
+                <h2 class="text-center">FORM EDIT USER</h2>
+                <hr>
+                {{-- @if(session('message'))
+                <div class="alert alert-success">
+                    {{ session('message') }}
+                </div>
+                @endif --}}
+                <h3 id="message"></h3>
+                <form action="" id="editListRegisterForm" method="post">
+                    @csrf
+                    <input type="text" name="id" id="id" class="form-control" value="" required="" readonly>
+                    <div class="form-group">
+                        <label><i class="fa fa-envelope"></i> Email</label>
+                        <input type="email" name="email" id="email" class="form-control" value="" required="">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa fa-user"></i> Username</label>
+                        <input type="text" name="name" id="name" class="form-control" value="" required="">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa fa-key"></i> Password</label>
+                        <input type="password" name="password" id="password" class="form-control" placeholder="Leave blank to keep current password">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa fa-address-book"></i> Role</label>
+                        <input type="text" name="roles" id="roles" class="form-control" value="" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block" id="but_edit_list_register"><i class="fa fa-user"></i> Update</button>
+                    <hr>
+                    <p class="text-center">Kembali ke <a href="javascript:void(0);">Dashboard</a></p>
+                </form>
+            </div>
         </div>
     </div>
-    <table id="userTable" class="display table table-bordered mb-2">
-        <thead>
-            <tr>
-                <th>Email</th>
-                <th>Name</th>
-                <th>Roles</th>
-                <th>Joined At</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Data akan diisi oleh DataTables -->
-        </tbody>
-    </table>
-    {{-- <div class="row mt-3">
-        <div class="col-md-6">
-            <button id="prevPage" class="btn btn-secondary">Previous</button>
-        </div>
-        <div class="col-md-6 text-right">
-            <button id="nextPage" class="btn btn-secondary">Next</button>
-        </div>
-    </div> --}}
+
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 $(document).ready(function() {
     // ========================== menapilkan list user ===============================
@@ -103,8 +137,15 @@ $(document).ready(function() {
         $.ajax({
             url: url, // Route to load the form
             type: 'GET',
-            success: function(response) {
-                $('.master-page').html(response);
+            success: function(data) {
+                $('#id').val(data.id);
+                $('#email').val(data.email);
+                $('#name').val(data.name);
+                $('#roles').val(data.roles);
+
+                // Tampilkan form
+                $('#formtable').hide();
+                $('#formedit').removeClass('d-none');
             },
             error: function() {
                 $('.master-page').html('<p>Error loading form.</p>');
@@ -112,6 +153,39 @@ $(document).ready(function() {
         });
     });
     // ========================== end of edit list user ===============================
+    // ========================== update list user ===============================
+    $(document).off('submit', '#editListRegisterForm');
+
+    $(document).on('submit', '#editListRegisterForm', function(e) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        e.preventDefault();
+        e.stopPropagation();
+        $.ajax({
+            url: '{{ route('update_list_register') }}', // Route to handle form submission
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                $('#formedit').addClass('d-none');
+                $('#formtable').show();
+
+                $('#userTable').DataTable().ajax.reload();
+                Swal.fire({
+                    title: 'Sukses!',
+                    text: 'Data berhasil diupdate!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            },
+            error: function(response) {
+                $('#message').html('<p>' + response.responseJSON.pesan + '</p>');
+            }
+        });
+    });
+    // ========================== end of update list user ===============================
 
 });
 
