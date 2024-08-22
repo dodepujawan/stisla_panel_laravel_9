@@ -93,8 +93,7 @@ $(document).ready(function() {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<button class="btn btn-primary btn-sm editBtn" data-id="' + row.id + '">Edit</button> ' +
-                                '<button class="btn btn-danger btn-sm deleteBtn" data-id="' + row.id + '">Delete</button>';
+                        return '<button class="btn btn-primary btn-sm editBtn" data-id="' + row.id + '">' + '<i class="fas fa-pencil-alt"></i>' + '</button> ' + '<button class="btn btn-danger btn-sm deleteBtn" data-id="' + row.id + '">' + '<i class="fas fa-trash"></i>' + '</button>';
                     }
                 }
             ],
@@ -105,15 +104,6 @@ $(document).ready(function() {
             $('#filterBtn').on('click', function() {
                 table.ajax.reload();
             });
-
-            // $('#prevPage').on('click', function() {
-            //     table.page('previous').draw('page');
-            // });
-
-            // $('#nextPage').on('click', function() {
-            //     table.page('next').draw('page');
-            // });
-
     }
     // ========================== end of menapilkan list user ===============================
 

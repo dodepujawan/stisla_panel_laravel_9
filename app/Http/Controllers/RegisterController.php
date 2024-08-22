@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -105,21 +106,33 @@ class RegisterController extends Controller
 
     public function filter_register(Request $request)
     {
+        if (!Auth::check()) {
+            return response()->json(['message' => 'Silakan login terlebih dahulu'], 401);
+        }
+
+        $user = Auth::user();
+
+        $allowedRoles = ['programmer', 'admin'];
+        if (!in_array($user->roles, $allowedRoles)) {
+            return response()->json(['message' => 'Akses ditolak'], 403);
+        }
+
+        // Jika pengguna memiliki peran yang sesuai, lanjutkan dengan query
         $query = DB::table('users');
 
         if ($request->has('startDate') && $request->startDate) {
             $query->where('created_at', '>=', $request->startDate);
         }
 
-        if($request->has('endDate') && $request->endDate) {
+        if ($request->has('endDate') && $request->endDate) {
             $query->where('created_at', '<=', $request->endDate);
         }
 
         if ($request->has('searchText') && $request->searchText) {
             $query->where(function($q) use ($request) {
                 $q->where('email', 'like', '%' . $request->searchText . '%')
-                ->orWhere('name', 'like', '%' . $request->searchText . '%')
-                ->orWhere('roles', 'like', '%' . $request->searchText . '%');
+                  ->orWhere('name', 'like', '%' . $request->searchText . '%')
+                  ->orWhere('roles', 'like', '%' . $request->searchText . '%');
             });
         }
 
@@ -129,6 +142,7 @@ class RegisterController extends Controller
             'data' => $users
         ]);
     }
+
 
     public function edit_list_register($id){
         // Fetch user data

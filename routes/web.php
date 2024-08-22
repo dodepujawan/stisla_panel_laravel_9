@@ -26,7 +26,7 @@ Route::prefix('login')->group(function () {
     Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout')->middleware('auth');
 });
 
-Route::prefix('register')->group(function () {
+Route::prefix('register')->middleware('auth')->group(function () {
     Route::get('/', [RegisterController::class, 'register'])->name('register');
     Route::post('actionregister', [RegisterController::class, 'actionregister'])->name('actionregister');
     Route::get('editregister', [RegisterController::class, 'editregister'])->name('editregister');

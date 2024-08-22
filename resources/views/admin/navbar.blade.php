@@ -24,9 +24,17 @@
                 <a href="#" class="dropdown-item has-icon edit-register">
                     <i class="fas fa-cog"></i> Edit Register
                 </a>
-                <a href="#" class="dropdown-item has-icon list-register">
-                    <i class="fas fa-cog"></i> List Register
-                </a>
+                @php
+                    $user = Auth::user();
+                    $allowedRoles = ['programmer', 'admin'];
+                @endphp
+
+                @if (in_array($user->roles, $allowedRoles))
+                    <a href="#" class="dropdown-item has-icon list-register">
+                        <i class="fas fa-address-book"></i> List Register
+                    </a>
+                @endif
+
                 <div class="dropdown-divider"></div>
                 <a href="{{route('actionlogout')}}" class="dropdown-item has-icon text-danger">
                     <i class="fas fa-sign-out-alt"></i> Logout
