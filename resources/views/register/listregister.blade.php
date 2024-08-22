@@ -15,20 +15,22 @@
                 <button id="filterBtn" class="btn btn-primary">Filter</button>
             </div>
         </div>
-        <table id="userTable" class="display table table-bordered mb-2">
-            <thead>
-                <tr>
-                    <th>Email</th>
-                    <th>Name</th>
-                    <th>Roles</th>
-                    <th>Joined At</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Data akan diisi oleh DataTables -->
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="userTable" class="display table table-bordered mb-2">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Name</th>
+                        <th>Roles</th>
+                        <th>Joined At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data akan diisi oleh DataTables -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div id="formedit" class="d-none">
