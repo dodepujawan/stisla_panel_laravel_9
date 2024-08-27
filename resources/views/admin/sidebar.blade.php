@@ -28,9 +28,9 @@
                 </ul>
             </li>
             <li class="nav-item dropdown">
-                <a href="#" class="nav-link has-dropdown"><i class="fas fa-redo"></i><span>Dashboard</span></a>
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-redo"></i><span>Transaksi</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="#">Halaman Index</a></li>
+                    <li><a class="nav-link" id="main_transaksi_link" href="#">transaksi</a></li>
                     <li><a class="nav-link" href="#}">Input Data</a></li>
                     <li><a class="nav-link" href="#">Data Nasabah</a></li>
                 </ul>

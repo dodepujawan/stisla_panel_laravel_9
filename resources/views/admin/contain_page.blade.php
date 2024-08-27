@@ -11,6 +11,7 @@
 @section('footer')
 <script>
 $(document).ready(function() {
+
 // ========================= Edit Register ======================================
     $(document).on('click', '.dropdown-item.edit-register', function(e) {
         e.preventDefault();
@@ -48,10 +49,27 @@ $(document).ready(function() {
             }
         });
     };
-
-        // ### Edit ###
-
 // ========================= End Of List Register ======================================
+
+// ========================= Main Transaksi ======================================
+    $(document).on('click', '.main-sidebar #main_transaksi_link', function(e) {
+            e.preventDefault();
+            loadMainTransaksilink();
+        });
+
+    function loadMainTransaksilink() {
+        $.ajax({
+            url: '{{ route('index_transaksi') }}',
+            type: 'GET',
+            success: function(response) {
+                $('.master-page').html(response);
+            },
+            error: function() {
+                $('.master-page').html('<p>Error loading form.</p>');
+            }
+        });
+    }
+// ========================= End Of Main Transaksi ======================================
 
 });
 </script>

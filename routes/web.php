@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +37,11 @@ Route::prefix('register')->middleware('auth')->group(function () {
     Route::get('edit_list_register/{id}', [RegisterController::class, 'edit_list_register'])->name('edit_list_register');
     Route::post('update_list_register', [RegisterController::class, 'update_list_register'])->name('update_list_register');
     Route::delete('delete_list_register/{id}', [RegisterController::class, 'delete_list_register'])->name('delete_list_register');
+});
+
+Route::prefix('transaksi')->middleware('auth')->group(function () {
+    Route::get('/', [TransaksiController::class, 'index'])->name('index_transaksi');
+    Route::get('/api/barangs', [TransaksiController::class, 'get_barangs'])->name('get_barangs');
 });
 
 Route::prefix('home')->group(function () {
