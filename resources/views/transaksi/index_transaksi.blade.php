@@ -4,7 +4,6 @@
         <div class="col-8">
             <form action="">
                 <div class="form-group mb-3">
-                    <label for="select_barang">Pilih Barang</label>
                     <select name="select_barang" id="select_barang" class="form-control">
                         <option></option>
                         <!-- Options for select dropdown -->
@@ -12,11 +11,9 @@
                     <button type="button" id="clear_select" class="btn btn-secondary mt-2"><i class="fa fa-eraser" aria-hidden="true"></i></button>
                 </div>
                 <div class="form-group mb-3">
-                    <label for="jumlah_trans">Jumlah Barang</label>
                     <input type="number" id="jumlah_trans" class="form-control" placeholder="Jumlah barang">
                 </div>
                 <div class="form-group mb-3">
-                    <label for="diskon_barang">Diskon Barang</label>
                     <input type="number" id="diskon_barang" class="form-control" placeholder="Diskon barang">
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
