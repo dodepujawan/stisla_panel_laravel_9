@@ -145,8 +145,7 @@ class RegisterController extends Controller
 
 
     public function edit_list_register($id){
-        // Fetch user data
-        $user = User::find($id);// Assuming session has user id
+        $user = User::find($id);
         return response()->json($user);
     }
 
@@ -155,7 +154,6 @@ class RegisterController extends Controller
         $result = [];
         DB::beginTransaction();
         try {
-            // Validate the request data
             $validatedData = $request->validate([
                 'email' => 'required|email',
                 'name' => 'required|string|max:255',
@@ -166,7 +164,6 @@ class RegisterController extends Controller
             $id = $request->input('id');
             $user = User::find($id);
 
-            // Update user details
             $user->email = $request->email;
             $user->name = $request->name;
             if ($request->password) {

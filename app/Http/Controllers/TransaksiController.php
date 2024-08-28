@@ -15,7 +15,7 @@ class TransaksiController extends Controller
         $search = $request->input('q'); // Ambil query pencarian
 
         $query = DB::table('barangs')
-                    ->select('id', 'kd_barang', 'nama_barang', 'harga', 'stok');
+                    ->select('id', 'kd_barang', 'nama_barang', 'harga', 'stok', 'kemasan');
 
         if ($search) {
             $query->where('kd_barang', 'LIKE', "%{$search}%")
