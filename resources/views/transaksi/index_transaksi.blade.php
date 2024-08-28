@@ -157,17 +157,17 @@ $(document).ready(function(){
                 <td>${counter++}</td>
                 <td>${kdBarang}</td>
                 <td>${namaBarang}</td>
-                <td>${hargaBarang.toFixed(2)}</td>
+                <td>${hargaBarang}</td>
                 <td class="editable" contenteditable="true">${jumlahTrans}</td>
-                <td>${diskonBarang.toFixed(2)}</td>
-                <td>${total.toFixed(2)}</td>
+                <td>${diskonBarang}</td>
+                <td>${total}</td>
                 <td><button type="button" class="btn btn-danger btn-sm delete-row"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
             </tr>
         `;
         $('#transaksi_table tbody').append(newRow);
 
         grandTotal += total;
-        $('#grand_total').text(grandTotal.toFixed(2));
+        $('#grand_total').text(grandTotal);
 
         this.reset();
         $('#select_barang').val(null).trigger('change');
@@ -181,14 +181,13 @@ $(document).ready(function(){
         let row = $(this).closest('tr');
         let total = parseFloat(row.find('td:eq(6)').text()) || 0;
 
-        row.remove(); // Hapus baris dari tabel
+        row.remove();
 
-        // Update grand total
         grandTotal -= total;
-        $('#grand_total').text(grandTotal.toFixed(2));
+        $('#grand_total').text(grandTotal);
     });
 
-    // Editing Table
+    // ### Editing Table
     $('#transaksi_table').on('blur', '.editable', function() {
         let newJumlah = parseFloat($(this).text()) || 0;
         let row = $(this).closest('tr');
@@ -198,11 +197,11 @@ $(document).ready(function(){
 
         // Hitung total baru dan update baris
         let total = (hargaBarang - diskonBarang) * newJumlah;
-        row.find('td:eq(6)').text(total.toFixed(2));
+        row.find('td:eq(6)').text(total);
 
         // Update grand total
         grandTotal = grandTotal - oldTotal + total;
-        $('#grand_total').text(grandTotal.toFixed(2));
+        $('#grand_total').text(grandTotal);
     });
 // =============================== End Of Input Barang To Table =========================================
 });
