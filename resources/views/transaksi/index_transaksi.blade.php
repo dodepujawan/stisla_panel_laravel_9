@@ -1,4 +1,5 @@
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+{{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" /> --}}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
 .product-info {
   display: flex;
@@ -87,11 +88,13 @@ h5 {
     </div>
     <button type="submit" class="btn btn-primary mt-2" id="save_table">Submit</button>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 $(document).ready(function(){
 // ================================= Select Barang ===========================================
     $('#select_barang').select2({
+        // tags: true,
         ajax: {
             url: '{{ route('get_barangs') }}',
             dataType: 'json',
@@ -174,7 +177,17 @@ $(document).ready(function(){
         $('#nama_barang').text('-');
         $('#harga_barang').text('-');
         $('#stok_barang').text('-');
-    });
+
+        setTimeout(function() {
+            $('#select_barang').select2('open');
+            document.querySelector('.select2-search__field').focus();
+        }, 0);
+
+            // auto type select2 penyebab jquery3.6 kurang compatible
+    //     $(document).on('select2:open', () => {
+    //     document.querySelector('.select2-search__field').focus();
+    //   });
+});
 
     // ### Detele Table
     $('#transaksi_table').on('click', '.delete-row', function() {
