@@ -178,15 +178,15 @@ $(document).ready(function(){
         $('#harga_barang').text('-');
         $('#stok_barang').text('-');
 
+        $(document).on('select2:open', () => {
+        document.querySelector('.select2-search__field').focus();
+      });
+
         setTimeout(function() {
             $('#select_barang').select2('open');
             document.querySelector('.select2-search__field').focus();
         }, 0);
 
-            // auto type select2 penyebab jquery3.6 kurang compatible
-    //     $(document).on('select2:open', () => {
-    //     document.querySelector('.select2-search__field').focus();
-    //   });
 });
 
     // ### Detele Table

@@ -23,6 +23,10 @@
             <form action="#" id="registerForm" method="post">
             @csrf
                 <div class="form-group">
+                    <label><i class="fa fa-user"></i> ID User</label>
+                    <input type="text" name="id_user" id="id_user" class="form-control" readonly>
+                </div>
+                <div class="form-group">
                     <label><i class="fa fa-envelope"></i> Email</label>
                     <input type="email" name="email" id="email" class="form-control" placeholder="Email" required="">
                 </div>
@@ -35,8 +39,12 @@
                     <input type="password" name="password" id="password" class="form-control" placeholder="Password" required="">
                 </div>
                 <div class="form-group">
-                    <label><i class="fa fa-address-book"></i> Role</label>
-                    <input type="text" name="role" id="role" class="form-control" value="guest" readonly>
+                   <label><i class="fa fa-address-book"></i> Role</label>
+                   <select name="role" id="role" class="form-control">
+                        <option value="AD">Admin</option>
+                        <option value="ST">Staff</option>
+                        <option value="GS">Guest</option>
+                   </select>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-user"></i> Register</button>
                 <hr>
@@ -55,7 +63,39 @@ $(document).ready(function() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    // ### Callbak user_id starter
+    var role = "AD";
+    $.ajax({
+            url: '{{ route("generate_user_id") }}',
+            type: 'GET',
+            data: { role: role },
+            success: function(response) {
+                // Tampilkan user_id di input
+                $('#id_user').val(response.user_id);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error: ' + error);
+            }
+    });
 
+    // ### Mengambil Nilai Roles Callback
+    $('#role').change(function() {
+        var role = $(this).val();
+        $.ajax({
+            url: '{{ route("generate_user_id") }}',
+            type: 'GET',
+            data: { role: role },
+            success: function(response) {
+                // Tampilkan user_id di input
+                $('#id_user').val(response.user_id);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error: ' + error);
+            }
+        });
+    });
+
+    // ###Submit Form
     $('#registerForm').on('submit', function(e) {
         e.preventDefault();
 
@@ -72,6 +112,19 @@ $(document).ready(function() {
                 $('#message').html('<p>' + response.pesan + '</p>');
                 if (response.pesan === 'Register Berhasil. Akun Anda sudah Aktif.') {
                     $('#registerForm')[0].reset();
+                    var role = "AD";
+                    $.ajax({
+                            url: '{{ route("generate_user_id") }}',
+                            type: 'GET',
+                            data: { role: role },
+                            success: function(response) {
+                                // Tampilkan user_id di input
+                                $('#id_user').val(response.user_id);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error: ' + error);
+                            }
+                    });
                 }
             },
             error: function(response) {

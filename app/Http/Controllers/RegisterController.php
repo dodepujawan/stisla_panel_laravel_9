@@ -33,15 +33,32 @@ class RegisterController extends Controller
                 'role' => 'required|string|max:255',
             ]);
 
-            // Create the user
+            $roleMapping = [
+                'AD' => 'admin',
+                'ST' => 'staff',
+                'GS' => 'guest',
+            ];
+
+            $role = $request->role;
+
+            // Konversi nilai role menggunakan mapping, apabila tidak ada ubah nilai jadi guest
+            $roleName = $roleMapping[$role] ?? 'guest';
+
+            // Buat request untuk generate_user_id
+            $generateRequest = new Request(['role' => $role]);
+
+            // Panggil metode generateUserId untuk mendapatkan user_id
+            $userIdResponse = $this->generate_user_id($generateRequest);
+            $userId = $userIdResponse->getData()->user_id; // Mengambil user_id dari response
+
             $user = User::create([
+                'user_id' => $userId,
                 'email' => $request->email,
                 'name' => $request->name,
                 'password' => Hash::make($request->password),
-                'roles' => $request->role,
+                'roles' => $roleName,
             ]);
 
-            // Commit the transaction
             DB::commit();
             $result['pesan'] = 'Register Berhasil. Akun Anda sudah Aktif.';
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -53,7 +70,6 @@ class RegisterController extends Controller
             DB::rollback();
             $result['pesan'] = 'Error: ' . $e->getMessage();
         }
-        // Return the result as JSON
         return response()->json($result);
     }
 
@@ -193,6 +209,29 @@ class RegisterController extends Controller
         }else{
             return response()->json(['error' => 'User tidak ditemukan'], 404);
         }
+    }
+
+    // Fungsi Calback id_user
+    public function generate_user_id(Request $request)
+    {
+        $role = $request->input('role');
+
+        $lastUser = DB::table('users')
+            ->where('user_id', 'LIKE', $role . '%')
+            ->orderBy('user_id', 'desc')
+            ->first();
+
+        if ($lastUser) {
+            // 1. Ambil Data user_id dari Objek, 2.strlen menghitung panjang string, substr memotong string berarti disini dipotong 2 karena nilai strlen role =2 _> substr('AD0005', 2) maka didapat nilai 0005. lalu int mendapat nilai integer disini berarti bernilai 5
+            $lastNumber = (int) substr($lastUser->user_id, strlen($role));
+            $newNumber = $lastNumber + 1;
+        } else {
+            $newNumber = 1;
+        }
+
+        $newUserId = $role . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+
+        return response()->json(['user_id' => $newUserId]);
     }
 
 }

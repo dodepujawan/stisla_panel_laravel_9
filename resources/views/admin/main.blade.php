@@ -1,15 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
     <style>
-        .section-header {
+       .section-header {
             overflow: hidden; /* Untuk menyembunyikan teks yang keluar dari container */
             white-space: nowrap; /* Mencegah teks wrap ke baris baru */
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            display: flex;
+            justify-content: center; /* Pusatkan konten secara horizontal */
+            align-items: center; /* Pusatkan konten secara vertikal */
+            height: 60px; /* Ubah sesuai kebutuhan */
+            text-align: center;
         }
 
-        .moving-text {
-            display: inline-block; /* Memungkinkan animasi */
-            padding-left: 100%; /* Mulai dari luar container di sebelah kanan */
-            animation: moveLeft 120s linear infinite; /* Sesuaikan durasi sesuai kebutuhan */
+        .centered-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .centered-container h3 {
+            margin: 0;
+            margin-top: 3px;
+            color: #FFFFFF; /* Warna putih untuk kontras yang baik */
+            font-family: 'Arial', sans-serif;
+        }
+
+        .centered-container p {
+            margin: 0;
+            line-height: 1;
+            color: #FFFFFF; /* Warna putih untuk kontras yang baik */
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* .moving-text {
+
+            padding-left: 100%;
+            animation: moveLeft 120s linear infinite;
         }
 
         @keyframes moveLeft {
@@ -19,7 +47,7 @@
             100% {
                 transform: translateX(-100%);
             }
-        }
+        } */
     </style>
 <head>
     <meta charset="UTF-8">
@@ -61,7 +89,11 @@
             <div class="main-content">
                 <section class="section">
                     <div class="section-header">
-                        <h1 class="moving-text">Happy {{ date('l') }}, Selamat beraktivitas {{ session('name') }}</h1>
+                        {{-- <h1 class="moving-text">Happy {{ date('l') }}, Selamat beraktivitas {{ session('name') }}</h1> --}}
+                        <div class="centered-container">
+                            <h3>AXMY</h3>
+                            <p>Axcelerate Managenent System</p>
+                        </div>
                     </div>
 
                     <div class="section-body">

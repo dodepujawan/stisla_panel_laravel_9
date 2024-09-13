@@ -37,6 +37,7 @@ Route::prefix('register')->middleware('auth')->group(function () {
     Route::get('edit_list_register/{id}', [RegisterController::class, 'edit_list_register'])->name('edit_list_register');
     Route::post('update_list_register', [RegisterController::class, 'update_list_register'])->name('update_list_register');
     Route::delete('delete_list_register/{id}', [RegisterController::class, 'delete_list_register'])->name('delete_list_register');
+    Route::get('/generate-user-id', [RegisterController::class, 'generate_user_id'])->name('generate_user_id');
 });
 
 Route::prefix('transaksi')->middleware('auth')->group(function () {

@@ -1,3 +1,23 @@
+<style>
+    /* table scroll */
+.table-container {
+    max-height: 300px; /* Sesuaikan tinggi maksimum sesuai kebutuhan */
+    overflow-y: auto;  /* Tambahkan scroll vertikal jika konten melebihi tinggi maksimum */
+    width: 100%;       /* Pastikan lebar kontainer sesuai dengan tabel */
+    border: 1px solid #ddd; /* Opsional: tambahkan border untuk kontainer tabel */
+}
+
+.table-container table {
+    width: 100%; /* Pastikan tabel mengambil lebar penuh dari kontainer */
+    border-collapse: collapse; /* Menghindari jarak antara border sel */
+}
+
+.table-container th, .table-container td {
+    padding: 8px; /* Opsional: tambahkan padding untuk sel tabel */
+    text-align: left; /* Opsional: sesuaikan perataan teks */
+}
+/* end of table scroll */
+</style>
 <div class="container mt-5">
     <div id="formtable">
         <h2>User Table</h2>
@@ -15,7 +35,7 @@
                 <button id="filterBtn" class="btn btn-primary">Filter</button>
             </div>
         </div>
-        <div class="table-responsive">
+        <div class="mt-3 table-container table-responsive">
             <table id="userTable" class="display table table-bordered mb-2">
                 <thead>
                     <tr>
